@@ -1,4 +1,11 @@
 .App {
-  height: 100vh;
+    height: 100vh;
 }
 
+body {
+    background-color: black;
+}
+
+.SideNav {
+    height: 85%;
+}
