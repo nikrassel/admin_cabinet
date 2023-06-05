@@ -1,7 +1,11 @@
 import "./App.css"
-import MainComponent from "./components/ui/mainComponent"
+import { Route, Routes } from "react-router-dom"
 import SideNavBar from "./components/ui/sideNavBar"
 import UpperNavBar from "./components/ui/upperNavBar"
+import Proposal from "./components/page/proposal"
+import ModeratorList from "./components/page/moderatorList"
+import TaskList from "./components/page/taskList"
+import PushMessages from "./components/page/pushMessages"
 
 function App() {
     return (
@@ -15,7 +19,12 @@ function App() {
                         <SideNavBar />
                     </div>
                     <div className="col-md-10">
-                        <MainComponent />
+                        <Routes>
+                            <Route path="/" Component={Proposal} />
+                            <Route path="/moderators" Component={ModeratorList} />
+                            <Route path="/tasks" Component={TaskList} />
+                            <Route path="/messages" Component={PushMessages} />
+                        </Routes>
                     </div>
                 </div>
             </div>
