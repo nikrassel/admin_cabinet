@@ -6,7 +6,7 @@ const http = axios.create({
 })
 
 http.interceptors.request.use(
-    async function(config) {
+    async function (config) {
         if (configFile.isFireBase) {
             const containSlash = /\/$/gi.test(config.url)
             config.url =
@@ -14,7 +14,7 @@ http.interceptors.request.use(
         }
         return config
     },
-    function(error) {
+    function (error) {
         return Promise.reject(error)
     }
 )

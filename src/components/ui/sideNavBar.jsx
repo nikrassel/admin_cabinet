@@ -16,24 +16,43 @@ const SideNavBar = () => {
             navigate("/messages")
         }
         const navBtns = document.querySelectorAll(".navbtn")
-        for (const btn of navBtns ) {
+        for (const btn of navBtns) {
             btn.classList = "navbtn btn btn-outline-light m-2"
         }
         target.target.className = "navbtn btn btn-outline-light m-2 active"
-
     }
     return (
         <div className="d-flex flex-column text-bg-secondary align-items-start text-start position-relative">
-            <button type="button" className="navbtn btn btn-outline-light m-2" id="proposals" onClick={handleNavigate}>
+            <button
+                type="button"
+                className="navbtn btn btn-outline-light m-2"
+                id="proposals"
+                onClick={handleNavigate}
+            >
                 Предложения
             </button>
-            <button type="button" className="navbtn btn btn-outline-light m-2" id="moderators" onClick={handleNavigate}>
+            <button
+                type="button"
+                className="navbtn btn btn-outline-light m-2"
+                id="moderators"
+                onClick={handleNavigate}
+            >
                 Модераторы
             </button>
-            <button type="button" className="navbtn btn btn-outline-light m-2" id="tasks" onClick={handleNavigate}>
+            <button
+                type="button"
+                className="navbtn btn btn-outline-light m-2"
+                id="tasks"
+                onClick={handleNavigate}
+            >
                 Задачи
             </button>
-            <button type="button" className="navbtn btn btn-outline-light m-2" id="pushes" onClick={handleNavigate}>
+            <button
+                type="button"
+                className="navbtn btn btn-outline-light m-2"
+                id="pushes"
+                onClick={handleNavigate}
+            >
                 Уведомления
             </button>
         </div>
