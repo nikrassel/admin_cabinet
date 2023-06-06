@@ -4,6 +4,7 @@ import { loadUsersList } from "../../../store/users"
 import { loadMessages } from "../../../store/messages"
 import { loadTasks } from "../../../store/tasks"
 import { loadPushes } from "../../../store/pushes"
+import { loadModerators } from "../../../store/moderators"
 
 const AppLoader = ({ children }) => {
     const dispatch = useDispatch()
@@ -11,6 +12,7 @@ const AppLoader = ({ children }) => {
     dispatch(loadMessages())
     dispatch(loadTasks())
     dispatch(loadPushes())
+    dispatch(loadModerators())
     return children
 }
 
