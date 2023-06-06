@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAction, createSlice } from "@reduxjs/toolkit"
 import moderatorsService from "../services/moderators.service"
 
 const moderatorsSlice = createSlice({
@@ -19,12 +19,17 @@ const moderatorsSlice = createSlice({
         moderatorsRequestFailed: (state, action) => {
             state.error = action.payload
             state.isLoading = false
+        },
+        moderatorsUpdate: (state, action) => {
+            state.entities[action.payload.id] = action.payload
         }
     }
 })
 
 const { reducer: moderatorsReducer, actions } = moderatorsSlice
-const { moderatorsRequested, moderatorsReceved, moderatorsRequestFailed } = actions
+const { moderatorsRequested, moderatorsReceved, moderatorsRequestFailed, moderatorsUpdate } = actions
+const moderatorUpdateRequested = createAction("moderators/updateRequested")
+const moderatorUpdateFailed = createAction("moderators/updateFailed")
 
 export const loadModerators = () => async (dispatch) => {
     dispatch(moderatorsRequested())
@@ -33,6 +38,16 @@ export const loadModerators = () => async (dispatch) => {
         dispatch(moderatorsReceved(content))
     } catch (error) {
         dispatch(moderatorsRequestFailed(error.message))
+    }
+}
+
+export const updateModerator = (data) => async(dispatch) => {
+    dispatch(moderatorUpdateRequested)
+    try {
+        const content = await moderatorsService.update(data)
+        dispatch(moderatorsUpdate(content))
+    } catch (error) {
+        dispatch(moderatorUpdateFailed())
     }
 }
 
