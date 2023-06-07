@@ -13,6 +13,13 @@ const messageService = {
             payload
         )
         return data
+    },
+    update: async (payload) => {
+        const { data } = await httpService.patch(
+            messageEndpoint + payload.id,
+            payload
+        )
+        return data
     }
 }
 

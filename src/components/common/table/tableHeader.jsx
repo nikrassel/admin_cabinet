@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 import PropTypes from "prop-types"
 
 const TableHeader = ({ columns, onSort, selectedSort }) => {
@@ -21,11 +21,7 @@ const TableHeader = ({ columns, onSort, selectedSort }) => {
                                 ? () => handleSort(columns[column].path)
                                 : undefined
                         }
-                        role={
-                            columns[column].path
-                                ? "button"
-                                : undefined
-                        }
+                        role={columns[column].path ? "button" : undefined}
                     >
                         {columns[column]?.name && columns[column].name}
                         {columns[column]?.name && (
@@ -36,16 +32,17 @@ const TableHeader = ({ columns, onSort, selectedSort }) => {
                                         ? "up-fill"
                                         : "down-fill")
                                 }
-                            ></i>)}
+                            ></i>
+                        )}
                     </th>
                 ))}
             </tr>
         </thead>
-    );
+    )
 }
 
 TableHeader.propTypes = {
     columns: PropTypes.object
 }
- 
-export default TableHeader;
+
+export default TableHeader

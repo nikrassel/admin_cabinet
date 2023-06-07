@@ -33,7 +33,13 @@ const moderatorsSlice = createSlice({
 })
 
 const { reducer: moderatorsReducer, actions } = moderatorsSlice
-const { moderatorsRequested, moderatorsReceved, moderatorsRequestFailed, moderatorsUpdate, moderatorsAdd } = actions
+const {
+    moderatorsRequested,
+    moderatorsReceved,
+    moderatorsRequestFailed,
+    moderatorsUpdate,
+    moderatorsAdd
+} = actions
 const moderatorUpdateRequested = createAction("moderators/updateRequested")
 const moderatorUpdateFailed = createAction("moderators/updateFailed")
 const moderatorCreateRequested = createAction("moderator/createRequested")
@@ -64,7 +70,7 @@ export const createModerator = (data) => async (dispatch) => {
     }
 }
 
-export const updateModerator = (data) => async(dispatch) => {
+export const updateModerator = (data) => async (dispatch) => {
     dispatch(moderatorUpdateRequested())
     try {
         const content = await moderatorsService.update(data)

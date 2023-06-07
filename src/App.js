@@ -22,14 +22,14 @@ function App() {
                         </div>
                         <div className="col-md-10">
                             <Routes>
-                                <Route path="/" Component={Proposal} />
+                                <Route path="/:id?" Component={Proposal} />
                                 <Route
                                     path="/moderators/:addNew?"
                                     Component={ModeratorList}
                                 />
                                 <Route path="/tasks" Component={TaskList} />
                                 <Route
-                                    path="/messages"
+                                    path="/pushes"
                                     Component={PushMessages}
                                 />
                             </Routes>

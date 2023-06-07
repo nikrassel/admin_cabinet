@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 
 const SetButton = ({ label, parentId, onChange }) => {
     function handleChange(target) {
@@ -6,10 +6,15 @@ const SetButton = ({ label, parentId, onChange }) => {
         onChange(name)
     }
     return (
-        <button type="button" className='btn btn-outline-danger' name={parentId} onClick={handleChange}>
+        <button
+            type="button"
+            className="btn btn-outline-danger"
+            name={parentId}
+            onClick={handleChange}
+        >
             {label}
         </button>
-    );
+    )
 }
- 
-export default SetButton;
+
+export default SetButton

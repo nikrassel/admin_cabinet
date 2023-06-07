@@ -14,13 +14,15 @@ const ModeratorList = () => {
         return (
             <>
                 <h2>Модераторы</h2>
-                {addNew
-                    ? <SetModerator users={users} />
-                    : <ModeratorTable moderators={moderators} />}
+                {addNew && addNew === "addNew" ? (
+                    <SetModerator users={users} />
+                ) : (
+                    <ModeratorTable moderators={moderators} />
+                )}
             </>
         )
     }
-    return <h5>Loading...</h5>
+    return <h4>Loading...</h4>
 }
 
 export default ModeratorList

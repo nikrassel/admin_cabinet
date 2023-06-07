@@ -1,37 +1,24 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
+import { useDispatch } from "react-redux"
 import TableHeader from "../../common/table/tableHeader"
 import TableBody from "../../common/table/tableBody"
-import SelectStatus from "../../common/form/selectStatus"
+import dateFormater from "../../../utils/dateFormater"
 import _ from "lodash"
-import { useDispatch } from "react-redux"
-import { updateModerator } from "../../../store/moderators"
 import { paginate } from "../../../utils/paginate"
 import TextField from "../../common/form/textField"
 import Pagination from "../../common/pagination"
-import { useNavigate } from "react-router-dom"
+import SelectMessageStatus from "../../common/form/selectMessageStatus"
+import { updateMessage } from "../../../store/messages"
 
-const ModeratorTable = ({ moderators }) => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+const MessageTable = ({ messages }) => {
     const pageSize = 6
+    const dispatch = useDispatch()
     const [currentPage, setCurrentPage] = useState(1)
-    const [modList, setModLayout] = useState(moderators)
+    const [messageList, setMessageList] = useState(messages)
+    const messageStatus = ["Принято", "Отклонено", "На проверке"]
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" })
     const [search, setSearch] = useState("")
-    const moderatorStatus = ["deleted", "active", "suspended"]
-    function handleChangeStatus(name, value) {
-        const temp = { ...moderators[name] }
-        temp.status = value
-        const tempMod = {
-            ...modList,
-            [name]: {
-                ...temp
-            }
-        }
-        dispatch(updateModerator(temp))
-        setModLayout(tempMod)
-    }
     useEffect(() => {
         setCurrentPage(1)
     }, [search])
@@ -44,11 +31,22 @@ const ModeratorTable = ({ moderators }) => {
     function handleChange({ name, value }) {
         setSearch(value)
     }
-    function navigateToModSetting() {
-        navigate("/moderators/addNew")
+    function handleChangeMessageStatus(name, value) {
+        const temp = { ...messages[name] }
+        temp.status = value
+        console.log(temp)
+        const tempMessages = {
+            ...messageList,
+            [name]: {
+                ...temp
+            }
+        }
+        dispatch(updateMessage(temp))
+        setMessageList(tempMessages)
     }
     const columns = {
         avatar: {
+            name: "Пользователь",
             component: (
                 <img
                     src={`https://avatars.dicebear.com/api/avataaars/${(
@@ -62,36 +60,46 @@ const ModeratorTable = ({ moderators }) => {
                 ></img>
             )
         },
-        name: {
-            path: "name",
-            name: "Имя пользователя"
+        title: {
+            path: "title",
+            name: "Тема"
+        },
+        message: {
+            path: "text",
+            name: "Сообщение"
+        },
+        date: {
+            name: "Дата",
+            path: "creationDate",
+            component: (item) => <p>{dateFormater(item.creationDate)}</p>
         },
         status: {
-            path: "status",
-            name: "Статус"
-        },
-        changeStatus: {
+            name: "Статус",
             component: (item) => (
-                <SelectStatus
-                    label="Выберите статус"
-                    values={moderatorStatus}
+                <SelectMessageStatus
+                    label={item.status}
+                    values={messageStatus}
                     parentId={item.id}
-                    onChange={handleChangeStatus}
+                    onChange={handleChangeMessageStatus}
                 />
             )
         }
     }
-    if (moderators) {
-        let modLayout = { ...modList }
+    if (messages) {
+        let messageLayout = { ...messageList }
         if (search) {
             const nameRegExp = new RegExp(`(?:${search.toLowerCase()})`, "g")
-            modLayout = Object.values(modLayout).filter((moderator) =>
-                nameRegExp.test(moderator.name.toLowerCase())
+            messageLayout = Object.values(messageLayout).filter((message) =>
+                nameRegExp.test(message.title.toLowerCase())
             )
         }
-        const count = Object.keys(modLayout).lenght
-        const sortedMod = _.orderBy(modLayout, [sortBy.path], [sortBy.order])
-        const modCrop = paginate(sortedMod, currentPage, pageSize)
+        const count = Object.keys(messageLayout).lenght
+        const sortedMessages = _.orderBy(
+            messageLayout,
+            [sortBy.path],
+            [sortBy.order]
+        )
+        const messageCrop = paginate(sortedMessages, currentPage, pageSize)
         return (
             <>
                 <div className="row align-items-center">
@@ -112,15 +120,6 @@ const ModeratorTable = ({ moderators }) => {
                             onChange={handleChange}
                         ></TextField>
                     </div>
-                    <div className="col">
-                        <button
-                            type="button"
-                            className="btn btn-outline-danger"
-                            onClick={navigateToModSetting}
-                        >
-                            Добавить
-                        </button>
-                    </div>
                 </div>
                 <table className="table table-dark table-striped">
                     <TableHeader
@@ -128,15 +127,15 @@ const ModeratorTable = ({ moderators }) => {
                         onSort={handleSort}
                         selectedSort={sortBy}
                     />
-                    <TableBody data={modCrop} columns={columns} />
+                    <TableBody data={messageCrop} columns={columns} />
                 </table>
             </>
         )
     }
 }
 
-ModeratorTable.propTypes = {
-    moderators: PropTypes.object
+MessageTable.propTypes = {
+    messages: PropTypes.object
 }
 
-export default ModeratorTable
+export default MessageTable

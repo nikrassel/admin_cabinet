@@ -14,7 +14,7 @@ const moderatorsService = {
         )
         return data
     },
-    update: async(payload) => {
+    update: async (payload) => {
         const { data } = await httpService.patch(
             moderatorsEndpoint + payload.id,
             payload

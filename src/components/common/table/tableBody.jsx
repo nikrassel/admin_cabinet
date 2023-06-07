@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 import PropTypes from "prop-types"
 
 const TableBody = ({ data, columns }) => {
@@ -22,7 +22,7 @@ const TableBody = ({ data, columns }) => {
                 </tr>
             ))}
         </tbody>
-    );
+    )
 }
 
 TableBody.propTypes = {
@@ -30,4 +30,4 @@ TableBody.propTypes = {
     columns: PropTypes.object.isRequired
 }
 
-export default TableBody;
+export default TableBody

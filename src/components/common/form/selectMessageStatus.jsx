@@ -1,7 +1,6 @@
 import React from "react"
-import PropTypes from "prop-types"
 
-const SelectStatus = ({ label, values, parentId, onChange }) => {
+const SelectMessageStatus = ({ label, values, parentId, onChange }) => {
     function handleChange(target) {
         const name = target.target.name
         const value = target.target.value
@@ -31,16 +30,15 @@ const SelectStatus = ({ label, values, parentId, onChange }) => {
                         </button>
                     </li>
                 ))}
+                <br />
+                <li>
+                    <button type="button" className="btn btn-danger m-2">
+                        Ответить
+                    </button>
+                </li>
             </ul>
         </div>
     )
 }
 
-SelectStatus.propTypes = {
-    label: PropTypes.string,
-    values: PropTypes.array,
-    parentId: PropTypes.string,
-    onChange: PropTypes.func
-}
-
-export default SelectStatus
+export default SelectMessageStatus
