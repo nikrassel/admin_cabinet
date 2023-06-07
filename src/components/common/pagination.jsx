@@ -18,7 +18,7 @@ const Pagination = (props) => {
                         key={"page_" + page}
                     >
                         <button
-                            className="page-link"
+                            className="page-link bg-body text-dark border border-dark-subtle"
                             onClick={() => onPageChange(page)}
                         >
                             {page}

@@ -24,7 +24,7 @@ function App() {
                             <Routes>
                                 <Route path="/" Component={Proposal} />
                                 <Route
-                                    path="/moderators"
+                                    path="/moderators/:addNew?"
                                     Component={ModeratorList}
                                 />
                                 <Route path="/tasks" Component={TaskList} />

@@ -1,37 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from "prop-types"
-import TableHeader from "../../common/table/tableHeader"
-import TableBody from "../../common/table/tableBody"
-import SelectStatus from "../../common/form/selectStatus"
-import _ from "lodash"
-import { useDispatch } from "react-redux"
-import { updateModerator } from '../../../store/moderators';
-import { paginate } from "../../../utils/paginate"
+import SetButton from '../../common/form/setButton';
 import TextField from "../../common/form/textField"
 import Pagination from "../../common/pagination"
+import { paginate } from "../../../utils/paginate"
+import TableHeader from "../../common/table/tableHeader"
+import TableBody from "../../common/table/tableBody"
+import { useDispatch } from "react-redux"
+import _ from "lodash"
+import { updateUser } from '../../../store/users';
+import { createModerator } from '../../../store/moderators';
 import { useNavigate } from 'react-router-dom';
 
-const ModeratorTable = ({ moderators }) => {
+const SetModerator = ({ users }) => {
+    const validUsers = Object.values(users).filter((user) => user.moderator === "no")
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const pageSize = 6
     const [currentPage, setCurrentPage] = useState(1)
-    const [modList, setModLayout] = useState(moderators)
+    const [userList, setUserList] = useState(validUsers)
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" })
     const [search, setSearch] = useState("")
-    const moderatorStatus = ["deleted", "active", "suspended"]
-    function handleChangeStatus (name, value) {
-        const temp = { ...moderators[name] }
-        temp.status = value
-        const tempMod = {
-            ...modList,
-            [name]: {
-                ...temp
-            }
-        }
-        dispatch(updateModerator(temp))
-        setModLayout(tempMod)
-    }
     useEffect(() => {
         setCurrentPage(1)
     }, [search])
@@ -44,8 +32,16 @@ const ModeratorTable = ({ moderators }) => {
     function handleChange({ name, value }) {
         setSearch(value)
     }
-    function navigateToModSetting() {
-        navigate("/moderators/addNew")
+    function handleSetModerator(name) {
+        const temp = { ...users[name] }
+        temp.moderator = "yes"
+        const tempUsers = validUsers.filter((user) => user.id !== name)
+        dispatch(updateUser(temp))
+        dispatch(createModerator(temp))
+        setUserList(tempUsers)
+    }
+    function navigateBack() {
+        navigate("/moderators")
     }
     const columns = {
         avatar: {
@@ -61,38 +57,34 @@ const ModeratorTable = ({ moderators }) => {
             path: "name",
             name: "Имя пользователя"
         },
-        status: {
-            path: "status",
-            name: "Статус"
-        },
         changeStatus: {
             component: (item) => (
-                <SelectStatus
-                    label="Выберите статус"
-                    values={moderatorStatus}
+                <SetButton 
+                    label={"Сделать модератором"}
                     parentId={item.id}
-                    onChange={handleChangeStatus}
+                    onChange={handleSetModerator}
                 />
             )
         }
     }
-    if (moderators) {
-        let modLayout = { ...modList }
+    if (userList) {
+        let userLayout = { ...userList }
         if (search) {
             const nameRegExp = new RegExp(`(?:${search.toLowerCase()})`, "g")
-            modLayout = Object.values(modLayout).filter((moderator) =>
-                nameRegExp.test(moderator.name.toLowerCase())
+            userLayout = Object.values(userLayout).filter((user) =>
+                nameRegExp.test(user.name.toLowerCase())
             )
         }
-        const count = Object.keys(modLayout).lenght
-        const sortedMod = _.orderBy(
-            modLayout,
+        const count = Object.keys(userLayout).length
+        const sortedUsers = _.orderBy(
+            userLayout,
             [sortBy.path],
             [sortBy.order]
         )
-        const modCrop = paginate(sortedMod, currentPage, pageSize)
+        const userCrop = paginate(sortedUsers, currentPage, pageSize)
         return (
             <>
+                <h4>Назначте новых модераторов</h4>
                 <div className='row align-items-center'>
                     <div className='col '>
                         <Pagination
@@ -112,7 +104,7 @@ const ModeratorTable = ({ moderators }) => {
                         ></TextField>
                     </div>
                     <div className='col'>
-                        <button type='button' className='btn btn-outline-danger' onClick={navigateToModSetting}>Добавить</button>
+                        <button type='button' className='btn btn-outline-danger' onClick={navigateBack}>Назад</button>
                     </div>
                 </div>
                 <table className="table table-dark table-striped">
@@ -120,17 +112,11 @@ const ModeratorTable = ({ moderators }) => {
                         columns={columns} 
                         onSort={handleSort} 
                         selectedSort={sortBy}/>
-                    <TableBody data={modCrop} columns={columns} />
+                    <TableBody data={userCrop} columns={columns} />
                 </table>
             </>
         );
     }
-   
-}
-
-ModeratorTable.propTypes = {
-    moderators: PropTypes.object,
-    users: PropTypes.object
 }
  
-export default ModeratorTable;
+export default SetModerator;

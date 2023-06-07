@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAction, createSlice } from "@reduxjs/toolkit"
 import usersService from "../services/users.service"
 
 const usersSlice = createSlice({
@@ -19,12 +19,17 @@ const usersSlice = createSlice({
         usersRequestFailed: (state, action) => {
             state.error = action.payload
             state.isLoading = false
+        },
+        userUpdate: (state, action) => {
+            state.entities[action.payload.id] = action.payload
         }
     }
 })
 
 const { reducer: usersReducer, actions } = usersSlice
-const { usersRequested, usersReceved, usersRequestFailed } = actions
+const { usersRequested, usersReceved, usersRequestFailed, userUpdate } = actions
+const userUpdateRequested = createAction("user/updateRequested")
+const userUpdateFailed = createAction("user/updateFailed")
 
 export const loadUsersList = () => async (dispatch) => {
     dispatch(usersRequested())
@@ -33,6 +38,16 @@ export const loadUsersList = () => async (dispatch) => {
         dispatch(usersReceved(content))
     } catch (error) {
         dispatch(usersRequestFailed(error.message))
+    }
+}
+
+export const updateUser = (data) => async (dispatch) => {
+    dispatch(userUpdateRequested())
+    try {
+        const content = await usersService.update(data)
+        dispatch(userUpdate(content))
+    } catch (error) {
+        dispatch(userUpdateFailed())
     }
 }
 
