@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import PropTypes from "prop-types"
 import { useDispatch } from "react-redux"
 import TableHeader from "../../common/table/tableHeader"
@@ -14,6 +15,7 @@ import { updateMessage } from "../../../store/messages"
 const MessageTable = ({ messages }) => {
     const pageSize = 6
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [currentPage, setCurrentPage] = useState(1)
     const [messageList, setMessageList] = useState(messages)
     const messageStatus = ["Принято", "Отклонено", "На проверке"]
@@ -43,6 +45,9 @@ const MessageTable = ({ messages }) => {
         }
         dispatch(updateMessage(temp))
         setMessageList(tempMessages)
+    }
+    function handleMoveToAnswer(id) {
+        navigate(`/${id}`)
     }
     const columns = {
         avatar: {
@@ -81,6 +86,7 @@ const MessageTable = ({ messages }) => {
                     values={messageStatus}
                     parentId={item.id}
                     onChange={handleChangeMessageStatus}
+                    onMove={handleMoveToAnswer}
                 />
             )
         }

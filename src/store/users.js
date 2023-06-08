@@ -53,4 +53,13 @@ export const updateUser = (data) => async (dispatch) => {
 
 export const getUsers = () => (state) => state.users.entities
 
+export const getUserById = (id) => (state) => {
+    const usersList = state.users.entities
+    if (usersList) {
+        const user = Object.values(usersList).find((item) => item.id === id)
+        return user
+    }
+    return null
+}
+
 export default usersReducer

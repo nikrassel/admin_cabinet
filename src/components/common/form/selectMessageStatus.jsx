@@ -1,6 +1,6 @@
 import React from "react"
 
-const SelectMessageStatus = ({ label, values, parentId, onChange }) => {
+const SelectMessageStatus = ({ label, values, parentId, onChange, onMove }) => {
     function handleChange(target) {
         const name = target.target.name
         const value = target.target.value
@@ -30,9 +30,13 @@ const SelectMessageStatus = ({ label, values, parentId, onChange }) => {
                         </button>
                     </li>
                 ))}
-                <br />
+                <br color="dark" />
                 <li>
-                    <button type="button" className="btn btn-danger m-2">
+                    <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => onMove(parentId)}
+                    >
                         Ответить
                     </button>
                 </li>
